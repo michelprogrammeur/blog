@@ -4,9 +4,12 @@ namespace App\Controllers\Auth;
 
 use App\Controllers\Controller;
 use App\Models\User;
+use App\Helpers\Helpers;
 
-class LoginController extends Controller
+class LoginController
 {
+    use Helpers;
+
     public function loginIndex() {
         if (!empty($_SESSION['errors'])) {
             session_destroy();

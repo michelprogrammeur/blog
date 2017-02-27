@@ -1,3 +1,5 @@
+<?php include __DIR__ .'/../../resources/Views/partials/header.php'; ?>
+
 <h1>Page d'accueil</h1>
 
 <?php if(isset($_SESSION['user']) && !empty($_SESSION['user'])) {

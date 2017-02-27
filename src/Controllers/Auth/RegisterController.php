@@ -6,10 +6,12 @@ use App\Controllers\Controller;
 use App\Models\Auth\Register;
 use App\Models\User;
 use App\Validator;
+use App\Helpers\Helpers;
 
-class RegisterController extends Controller
+class RegisterController
 {
     //public $errors = [];
+    use Helpers;
 
     public function registerIndex() {
         if (!empty($_SESSION['errors'])) {

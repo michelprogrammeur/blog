@@ -4,11 +4,12 @@ use App\Controllers\FrontController;
 use App\Controllers\Auth\RegisterController;
 use App\Controllers\Auth\LoginController;
 use App\Controllers\Admin\AdminController;
+use App\Controllers\Admin\PostController;
 use App\Middleware\AdminMiddleware;
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $method = $_SERVER['REQUEST_METHOD'];
-
+$admin = 'admin';
 
 $middleware = new AdminMiddleware();
 $admin_middleware = $middleware->middleware($_SESSION['user']->role);
@@ -22,24 +23,33 @@ if($method == 'GET') {
             break;
 
         // REGISTER ---------
-        case preg_match('#\/blog\/register$#', $uri) == 1:
+        case preg_match('#\/blog\/register(\/?)$#', $uri) == 1:
             $register = new RegisterController();
             $register->registerIndex();
             break;
 
         // CONNECTION-----
-        case preg_match('#\/blog\/login$#', $uri) == 1:
+        case preg_match('#\/blog\/login(\/?)$#', $uri) == 1:
             $login = new LoginController();
             $login->loginIndex();
             break;
 
         // DECONNECTION-----
-        case preg_match('#\/blog\/logout$#', $uri) == 1:
+        case preg_match('#\/blog\/logout(\/?)$#', $uri) == 1:
             $logout = new LoginController();
             $logout->logout();
             break;
 
-        case preg_match('#\/blog\/admin\/dashboard$#', $uri) == 1:
+        // ADMIN GET ROOTS ------------------
+        case preg_match('#\/blog\/' . $admin . '(\/?)$#', $uri) == 1:
+            if($admin_middleware) {
+                header('Location:' . URL . '/admin/dashboard');
+            }else {
+                header('Location:'. URL);
+            }
+            break;
+
+        case preg_match('#\/blog\/' . $admin . '\/dashboard(\/?)$#', $uri) == 1:
             if($admin_middleware) {
                 $login = new AdminController();
                 $login->index();
@@ -47,22 +57,44 @@ if($method == 'GET') {
                 header('Location:'. URL);
             }
             break;
-        
-        /*case preg_match('#\/blog-obj\/post\/([0-9]+)$#', $uri, $matches) == 1:
-            $posts = new PostController();
-            $posts->show($matches[1]);
+
+        // CRUD POSTS
+        case preg_match('#\/blog\/' . $admin . '\/posts(\/?)$#', $uri) == 1:
+            if($admin_middleware) {
+                $posts = new PostController();
+                $posts->index();
+            }else {
+                header('Location:'. URL);
+            }
             break;
 
-        case preg_match('#\/blog-obj\/post\/create#', $uri) == 1:
-            $posts = new PostController();
-            $posts->create();
+        case preg_match('#\/blog\/' . $admin . '\/post\/([0-9]+)(\/?)$#', $uri, $matches) == 1:
+            if($admin_middleware) {
+                $posts = new PostController();
+                $posts->show($matches[1]);
+            }else {
+                header('Location:'. URL);
+            }
             break;
 
-        case preg_match('#\/blog-obj\/post\/([0-9]+)\/edit$#', $uri, $matches) == 1:
-            $posts = new PostController();
-            $posts->edit($matches[1]);
+        case preg_match('#\/blog\/' . $admin . '\/post\/create(\/?)$#', $uri) == 1:
+            if($admin_middleware) {
+                $posts = new PostController();
+                $posts->create();
+            }else {
+                header('Location:'. URL);
+            }
             break;
-        */
+
+        case preg_match('#\/blog\/' . $admin . '\/post\/([0-9]+)\/edit$#', $uri, $matches) == 1:
+            if($admin_middleware) {
+                $posts = new PostController();
+                $posts->edit($matches[1]);
+            }else {
+                header('Location:'. URL);
+            }
+            break;
+
 
     }
 }
@@ -82,25 +114,33 @@ if($method == 'POST') {
             $login->login();
             break;
 
-
-        /*case preg_match('#\/blog-obj\/post\/store#', $uri) == 1:
-            $posts = new PostController();
-            $posts->store();
+        // ADMIN POST ROOTS ------------------
+        case preg_match('#\/blog\/'. $admin .'\/post\/store#', $uri) == 1:
+            if($admin_middleware) {
+                $posts = new PostController();
+                $posts->store();
+            }else {
+                header('Location:'. URL);
+            }
             break;
 
-        case preg_match('#\/blog-obj\/post\/([0-9]+)\/update$#', $uri, $matches) == 1:
-            $posts = new PostController();
-            $posts->update($matches[1]);
+        case preg_match('#\/blog\/'. $admin .'\/post\/([0-9]+)\/update$#', $uri, $matches) == 1:
+            if($admin_middleware) {
+                $posts = new PostController();
+                $posts->update($matches[1]);
+            }else {
+                header('Location:'. URL);
+            }
             break;
 
-        case preg_match('#\/blog-obj\/post\/([0-9]+)\/delete$#', $uri, $matches) == 1:
-            $posts = new PostController();
-            $posts->destroy($matches[1]);
+        case preg_match('#\/blog\/'. $admin .'\/post\/([0-9]+)\/delete$#', $uri, $matches) == 1:
+            if($admin_middleware) {
+                $posts = new PostController();
+                $posts->destroy($matches[1]);
+            }else {
+                header('Location:'. URL);
+            }
             break;
-        */
     }
-
-
-
 }
 

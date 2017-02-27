@@ -3,8 +3,12 @@
 namespace App\Controllers;
 
 
-class FrontController extends Controller
+use App\Helpers\Helpers;
+
+class FrontController
 {
+    use Helpers;
+
     public function index() {
         $this->renderView('index');
     }

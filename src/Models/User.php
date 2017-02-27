@@ -41,7 +41,7 @@ class User
         $result = self::verifyPassword($password, $d->password);
 
         if($result) {
-            if (isset($_SESSION['user'])) {
+            if(isset($_SESSION['user'])) {
                 session_destroy();
                 unset($_SESSION['user']);
             }else {
@@ -77,12 +77,5 @@ class User
         }
     }
 
-    // debug
-    public static function debug($data) {
-        echo '<pre>';
-        var_dump($data);
-        echo '</pre>';
-        die;
-    }
 
 }

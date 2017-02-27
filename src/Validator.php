@@ -27,7 +27,9 @@ class Validator
     }
 
     public function alphaNum($field, $message) {
-        if (!preg_match('#^[A-Za-z0-9_]+$#', $this->field($field))) {
+        $regex = '#^[A-Za-z0-9_]+$#';
+
+        if (!preg_match($regex, $this->field($field))) {
             $this->errors[$field] = $message;
         }
     }
@@ -48,13 +50,17 @@ class Validator
     }
 
     public function email($field, $message) {
-        if (!preg_match('#(?:[A-Z{1}a-z\d]*\@{1}[A-Za-z\d]*\.{1}[A-Za-z\d]+)#i', $this->field($field))) {
+        $regex = '#(?:[A-Z{1}a-z\d]*\@{1}[A-Za-z\d]*\.{1}[A-Za-z\d]+)#i';
+
+        if (!preg_match($regex, $this->field($field))) {
             $this->errors[$field] = $message;
         }
     }
 
     public function password($field, $message) {
-        if (empty($this->field($field)) || !preg_match('#^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{8,})\S$#', $this->field($field))) {
+        $regex = '#^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{8,})\S$#';
+
+        if (empty($this->field($field)) || !preg_match($regex, $this->field($field))) {
             $this->errors[$field] = $message;
         }
     }

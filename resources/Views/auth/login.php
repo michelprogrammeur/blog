@@ -8,21 +8,16 @@
     </div>
 <?php endif; ?>
 
+<h1>Page de connexion</h1>
 
-
-<h1>Page d'enregistrement</h1>
-<form id="register" method="post" action="">
-    <div id="register-pseudo">
-        <label>Pseudo</label>
-        <input type="text" name="pseudo" value="">
-    </div>
-    <div id="register-email">
+<form id="login" method="post" action="/blog/login">
+    <div id="login-email">
         <label>Email</label>
         <input type="email" name="email" value="">
     </div>
-    <div id="register-password">
+    <div id="login-password">
         <label>Mot de passe</label>
         <input type="text" name="password" value="">
     </div>
-    <button type="submit">S'inscrire</button>
+    <button type="submit">Connexion</button>
 </form>

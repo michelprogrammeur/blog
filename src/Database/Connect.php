@@ -28,4 +28,15 @@ class Connect {
         return $database;
     }
 
+
+    public function query($request, $params = false) {
+        if($params) {
+            $req = $this->getPdo()->prepare($request);
+            $req->execute($params);
+        }else {
+            $req = $this->getPdo()->query($request);
+        }
+
+        return $req;
+    }
 }

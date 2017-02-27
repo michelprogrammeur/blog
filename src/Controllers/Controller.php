@@ -16,5 +16,8 @@ class Controller
 
     public function redirect($path) {
         header('Location: '. URL . $path);
+        exit();
     }
+
+
 }

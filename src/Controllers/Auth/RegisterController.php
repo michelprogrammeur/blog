@@ -4,6 +4,7 @@ namespace App\Controllers\Auth;
 
 use App\Controllers\Controller;
 use App\Models\Auth\Register;
+use App\Models\User;
 use App\Validator;
 
 class RegisterController extends Controller
@@ -13,6 +14,9 @@ class RegisterController extends Controller
     public function registerIndex() {
         if (!empty($_SESSION['errors'])) {
             session_destroy();
+        }
+        if(isset($_SESSION['user'])) {
+            $this->redirect('/');
         }
         $this->renderView('auth.register');
     }
@@ -27,7 +31,7 @@ class RegisterController extends Controller
                 $email = htmlspecialchars($_POST['email']);
                 $password = htmlspecialchars($_POST['password']);
 
-                Register::registerUser([
+                User::registerUser([
                     "pseudo" => $pseudo,
                     "email" => $email,
                     "password" => $password,

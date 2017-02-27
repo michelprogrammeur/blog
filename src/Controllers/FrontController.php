@@ -6,6 +6,6 @@ namespace App\Controllers;
 class FrontController extends Controller
 {
     public function index() {
-        echo "coucou";
+        $this->renderView('index');
     }
 }

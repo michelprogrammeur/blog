@@ -8,10 +8,10 @@ use App\Middleware\AdminMiddleware;
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $method = $_SERVER['REQUEST_METHOD'];
+
+
 $middleware = new AdminMiddleware();
 $admin_middleware = $middleware->middleware($_SESSION['user']->role);
-
-
 
 if($method == 'GET') {
     switch ($uri) {

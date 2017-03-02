@@ -24,5 +24,9 @@
         <label>Mot de passe</label>
         <input type="text" name="password" value="">
     </div>
+    <div id="register-password">
+        <label>confirmation mot de passe</label>
+        <input type="text" name="password_confirm" value="">
+    </div>
     <button type="submit">S'inscrire</button>
 </form>

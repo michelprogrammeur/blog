@@ -12,25 +12,17 @@ class Login
         $response->execute([
             "email" => $data['email'],
         ]);
-        $d = $response->fetch(\PDO::FETCH_OBJ);
-        $result = self::verifyPassword($data['password'], $d->password);
+        $user = $response->fetch(\PDO::FETCH_OBJ);
+        $result = self::verifyPassword($data['password'], $user->password);
 
         if($result) {
-            $response = $connect->getPdo()->prepare('SELECT id, pseudo, email, role FROM users WHERE email = :email');
-            $response->execute([
-                "email" => $d->email,
-            ]);
-            $user = $response->fetch(\PDO::FETCH_OBJ);
+            $_SESSION['user']['id'] = $user->id;
+            $_SESSION['user']['pseudo'] = $user->pseudo;
+            $_SESSION['user']['email'] = $user->email;
+            $_SESSION['user']['role'] = $user->role;
 
-            if (isset($_SESSION['user'])) {
-                session_destroy();
-                unset($_SESSION['user']);
-            }else {
-                $_SESSION['user'] = $user;
-            }
             return true;
         }else {
-
             return false;
         }
     }

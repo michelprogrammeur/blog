@@ -10,6 +10,7 @@ namespace App\Controllers\Admin;
 
 use App\Models\Post;
 use App\Helpers\Helpers;
+use App\Validator;
 
 class PostController
 {
@@ -48,4 +49,6 @@ class PostController
         Post::deletePost($id);
         $this->redirect('/admin/posts');
     }
+
+
 }

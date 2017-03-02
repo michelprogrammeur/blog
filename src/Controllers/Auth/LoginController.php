@@ -3,17 +3,14 @@
 namespace App\Controllers\Auth;
 
 use App\Controllers\Controller;
-use App\Models\User;
 use App\Helpers\Helpers;
+use App\Models\Auth\Login;
 
 class LoginController
 {
     use Helpers;
 
     public function loginIndex() {
-        if (!empty($_SESSION['errors'])) {
-            session_destroy();
-        }
         if(isset($_SESSION['user'])) {
             $this->redirect('/');
         }
@@ -26,21 +23,20 @@ class LoginController
             $email = htmlspecialchars($_POST['email']);
             $password = htmlspecialchars($_POST['password']);
 
-            $result_login = User::loginUser([
+            $result_login = Login::loginUser([
                 "email" => $email,
                 "password" => $password,
             ]);
 
-            if($result_login) {
-                if ($_SESSION['user']->role === 'visiteur') {
+            if($result_login === true) {
+                if ($_SESSION['user']['role'] === 'visiteur') {
                     $this->redirect('/');
                 }
-                elseif ($_SESSION['user']->role === 'admin') {
+                elseif ($_SESSION['user']['role'] === 'admin') {
                     $this->redirect('/admin/dashboard');
                 }
             }
             else {
-                $_SESSION['errors']['login'] = "L'un des champs est incorrect.";
                 $this->redirect('/login');
             }
         }
@@ -49,7 +45,6 @@ class LoginController
 
     public function logout() {
         session_destroy();
-        unset($_SESSION['user']);
         $this->redirect('/');
     }
 

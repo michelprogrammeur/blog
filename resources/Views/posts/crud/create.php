@@ -1,3 +1,13 @@
+<?php if(!empty($_SESSION['errors'])): ?>
+    <div>
+        <?php foreach ($_SESSION['errors'] as $error) : ?>
+            <ul>
+                <li><?php echo $error; ?></li>
+            </ul>
+        <?php endforeach; ?>
+    </div>
+<?php endif; ?>
+
 <form id="post" method="post" action="/blog/admin/post/store">
     <div id="post-title">
         <label>Title</label>

@@ -16,5 +16,6 @@
                 <li class="active"><a href=<?php echo URL . '/admin/post/create'; ?>>créer</a></li>
             </ul>
         </li>
+        <li><a href=<?php echo URL . '/admin/comments'; ?>>Liste des commentaires signalés</a></li>
     </ul>
 </section>

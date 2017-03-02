@@ -3,13 +3,18 @@
 namespace App\Middleware;
 
 
+use App\Helpers\Helpers;
+
 class AdminMiddleware
 {
-    public function middleware($sessionRole) {
-        if($sessionRole === 'admin') {
+    use Helpers;
+
+    public function middleware() {
+        if($_SESSION['user']['role'] === 'admin') {
 
             return true;
         }else {
+            $this->redirect('/');
 
             return false;
         }

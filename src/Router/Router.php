@@ -5,14 +5,14 @@ use App\Controllers\Auth\RegisterController;
 use App\Controllers\Auth\LoginController;
 use App\Controllers\Admin\AdminController;
 use App\Controllers\Admin\PostController;
+use App\Controllers\CommentController;
 use App\Middleware\AdminMiddleware;
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $method = $_SERVER['REQUEST_METHOD'];
 $admin = 'admin';
 
-$middleware = new AdminMiddleware();
-$admin_middleware = $middleware->middleware($_SESSION['user']->role);
+$admin_middleware = new AdminMiddleware();
 
 if($method == 'GET') {
     switch ($uri) {
@@ -40,12 +40,15 @@ if($method == 'GET') {
             $logout->logout();
             break;
 
+        case preg_match('#\/blog\/post\/([0-9]+)(\/?)$#', $uri, $matches) == 1:
+            $logout = new FrontController();
+            $logout->showSinglePost($matches[1]);
+            break;
+
         // ADMIN GET ROOTS ------------------
         case preg_match('#\/blog\/' . $admin . '(\/?)$#', $uri) == 1:
             if($admin_middleware) {
                 header('Location:' . URL . '/admin/dashboard');
-            }else {
-                header('Location:'. URL);
             }
             break;
 
@@ -53,8 +56,13 @@ if($method == 'GET') {
             if($admin_middleware) {
                 $login = new AdminController();
                 $login->index();
-            }else {
-                header('Location:'. URL);
+            }
+            break;
+
+        case preg_match('#\/blog\/' . $admin . '\/comments$#', $uri) == 1:
+            if($admin_middleware) {
+                $comments = new CommentController();
+                $comments->CommentsReported();
             }
             break;
 
@@ -63,8 +71,6 @@ if($method == 'GET') {
             if($admin_middleware) {
                 $posts = new PostController();
                 $posts->index();
-            }else {
-                header('Location:'. URL);
             }
             break;
 
@@ -72,8 +78,6 @@ if($method == 'GET') {
             if($admin_middleware) {
                 $posts = new PostController();
                 $posts->show($matches[1]);
-            }else {
-                header('Location:'. URL);
             }
             break;
 
@@ -81,8 +85,6 @@ if($method == 'GET') {
             if($admin_middleware) {
                 $posts = new PostController();
                 $posts->create();
-            }else {
-                header('Location:'. URL);
             }
             break;
 
@@ -90,8 +92,6 @@ if($method == 'GET') {
             if($admin_middleware) {
                 $posts = new PostController();
                 $posts->edit($matches[1]);
-            }else {
-                header('Location:'. URL);
             }
             break;
 
@@ -114,13 +114,14 @@ if($method == 'POST') {
             $login->login();
             break;
 
-        // ADMIN POST ROOTS ------------------
+
+        // ----------- ADMIN POST ROOTS ------------ //
+
+        // POSTS
         case preg_match('#\/blog\/'. $admin .'\/post\/store#', $uri) == 1:
             if($admin_middleware) {
                 $posts = new PostController();
                 $posts->store();
-            }else {
-                header('Location:'. URL);
             }
             break;
 
@@ -128,8 +129,6 @@ if($method == 'POST') {
             if($admin_middleware) {
                 $posts = new PostController();
                 $posts->update($matches[1]);
-            }else {
-                header('Location:'. URL);
             }
             break;
 
@@ -137,8 +136,37 @@ if($method == 'POST') {
             if($admin_middleware) {
                 $posts = new PostController();
                 $posts->destroy($matches[1]);
-            }else {
-                header('Location:'. URL);
+            }
+            break;
+
+        // COMMENTS
+        case preg_match('#\/blog\/'. $admin .'\/comments#', $uri) == 1:
+            if($admin_middleware) {
+                $comments = new CommentController();
+            }
+            break;
+
+        case preg_match('#\/blog\/post\/([0-9]+)\/add$#', $uri, $matches) == 1:
+            $comment = new CommentController();
+            $comment->add($matches[1]);
+            break;
+
+        case preg_match('#\/blog\/comments\/report\/post\/([0-9]+)\/comment\/([0-9]+)$#', $uri, $matches) == 1 :
+            $ctrl = new CommentController();
+            $ctrl->report($matches[1], $matches[2]);
+            break;
+
+        case preg_match('#\/blog\/'. $admin .'\/comment\/([0-9]+)\/delete$#', $uri, $matches) == 1:
+            if($admin_middleware) {
+                $comments = new CommentController();
+                $comments->delete($matches[1]);
+            }
+            break;
+
+        case preg_match('#\/blog\/'. $admin .'\/comment\/([0-9]+)\/restore$#', $uri, $matches) == 1:
+            if($admin_middleware) {
+                $comments = new CommentController();
+                $comments->restore($matches[1]);
             }
             break;
     }

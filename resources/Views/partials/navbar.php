@@ -8,10 +8,12 @@
             <li><a href=<?php echo URL . '/register'; ?>>S'inscrire</a></li>
             <li><a href=<?php echo URL . '/login'; ?>>Connexion</a></li>
         <?php else: ?>
-            <li><a href=<?php echo URL . '/admin/dashboard'; ?>>Dashboard</a></li>
+            <?php if($_SESSION['user']['role'] === 'admin') :?>
+                <li><a href=<?php echo URL . '/admin/dashboard'; ?>>Dashboard</a></li>
+            <?php endif; ?>
             <li><a href=<?php echo URL . '/logout'; ?>>Déconnexion</a></li>
         <?php endif; ?>
     </ul>
-</nav><!--/.nav-collapse -->
+</nav>
 
 <div class="container">

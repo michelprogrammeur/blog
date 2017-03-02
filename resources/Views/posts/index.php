@@ -4,7 +4,7 @@
     <div id="billet">
         <p><?php echo $post->title; ?></p>
         <p><?php echo $post->content; ?></p>
-        <a href="<?php echo URL . '/admin/post/' . $post->id . "/edit"; ?>">Modifier</a>
+        <a href="<?php echo URL . '/admin/post/' . $post->id . "/edit"; ?>">Modifications</a>
 
         <form action="<?php echo URL . '/admin/post/' . $post->id . "/delete"; ?>" method="post">
             <button type="submit" onclick="return confirm('Voulez vous vraiment supprimer l\'article');">Delete</button>

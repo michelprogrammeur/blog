@@ -4,7 +4,9 @@ namespace App\Helpers;
 trait Helpers
 {
     public function __construct() {
-
+        if (!isset($_SESSION)) {
+            session_start();
+        }
     }
 
     public function renderView($path, array $data = []) {
@@ -14,7 +16,24 @@ trait Helpers
 
     public function redirect($path) {
         header('Location: '. URL . $path);
-        exit();
+
+        return $this;
     }
 
+    protected function with($name, $message) {
+        $this->session($name, $message);
+    }
+
+    protected function session ($index, $message) {
+        $session = $_SESSION['errors'][$index] = $message;
+
+        return $session;
+    }
+
+    public function debug($value) {
+        echo '<pre>';
+        var_dump($value);
+        echo '</pre>';
+        die;
+    }
 }

@@ -15,14 +15,36 @@ class Comment
     public static function getAllCommentsByPost($id) {
         global $connect;
 
-        $comments = $connect->getPdo()->prepare('SELECT * FROM comments WHERE post_id = :post_id And warning = 0');
-        $comments->execute([
+        $req = $connect->getPdo()->prepare('SELECT * FROM comments WHERE post_id = :post_id And warning = 0');
+        $req->execute([
             "post_id" => $id,
         ]);
 
-        $data = $comments->fetchAll(\PDO::FETCH_OBJ);
+        $comments = $req->fetchAll(\PDO::FETCH_OBJ);
 
-        return $data;
+        $comments_by_id = [];
+        foreach ($comments as $comment) {
+            $comments_by_id[$comment->id] = $comment;
+        }
+        return $comments_by_id;
+    }
+
+
+    public static function getAllWithReply($post_id, $unset_children = true)
+    {
+        $comments = $comments_by_id = self::getAllCommentsByPost($post_id);
+
+        foreach ($comments as $id => $comment) {
+            if ($comment->reply_id != 0) {
+                $comments_by_id[$comment->reply_id]->children[] = $comment;
+
+                if ($unset_children) {
+                    unset($comments[$id]);
+                }
+            }
+        }
+
+        return $comments;
     }
 
     // Récupère les commentaires signalés
@@ -35,6 +57,7 @@ class Comment
         return $data;
     }
 
+
     // Ajouter un nouveau commentaire
     public static function addComment($userId, $postId, $author, $content) {
         global $connect;
@@ -42,21 +65,38 @@ class Comment
         $empty = self::IfEmptyComment($content);
 
         if($empty) {
-            $comment = $connect->getPdo()->prepare('
+            $req = $connect->getPdo()->prepare('
                 INSERT INTO comments(user_id, post_id, author, content, published_at) 
                 VALUES(:user_id, :post_id, :author, :content, now())
             ');
-            $comment->execute([
+            $req->execute([
                 "user_id" => $userId,
                 "post_id" => $postId,
                 "author" => $author,
                 "content" => $content,
             ]);
 
-            $data = $comment->fetch(\PDO::FETCH_OBJ);
+            $data = $req->fetch(\PDO::FETCH_OBJ);
 
             return $data;
         }
+    }
+
+    // Ajouter une réponss à un commentaire
+    public static function addReply($userId, $postId, $replyId, $author, $content) {
+        global $connect;
+
+        $req = $connect->getPdo()->prepare("
+            INSERT INTO comments(user_id, post_id, reply_id, author, content, published_at) 
+            VALUES (:user_id, :post_id, :reply_id, :author, :content, NOW())
+        ");
+        $req->execute([
+            "user_id" => $userId,
+            "post_id" => $postId,
+            "reply_id" => $replyId,
+            "author" => $author,
+            "content" => $content
+        ]);
     }
 
     // Signale un commentaire

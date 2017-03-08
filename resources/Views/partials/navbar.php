@@ -11,6 +11,7 @@
             <?php if($_SESSION['user']['role'] === 'admin') :?>
                 <li><a href=<?php echo URL . '/admin/dashboard'; ?>>Dashboard</a></li>
             <?php endif; ?>
+            <li><a href=<?php echo URL . '/account'; ?>><?= $_SESSION['user']['pseudo'] ?></a></li>
             <li><a href=<?php echo URL . '/logout'; ?>>Déconnexion</a></li>
         <?php endif; ?>
     </ul>

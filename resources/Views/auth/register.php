@@ -1,12 +1,18 @@
-<?php if(!empty($_SESSION['errors'])): ?>
-    <div>
-        <?php foreach ($_SESSION['errors'] as $error) : ?>
-            <ul>
-                <li><?php echo $error; ?></li>
-            </ul>
-        <?php endforeach; ?>
-    </div>
-<?php endif; ?>
+
+<?php
+if (isset($_SESSION['errors']['error_pseudo']) && $_SESSION['errors']['error_pseudo'] != "") {
+    echo "<p>" . $_SESSION['errors']['error_pseudo'] . "</p>";
+    unset($_SESSION['errors']['error_pseudo']);
+}
+if (isset($_SESSION['errors']['error_email']) && $_SESSION['errors']['error_email'] != "") {
+    echo "<p>" . $_SESSION['errors']['error_email'] . "</p>";
+    unset($_SESSION['errors']['error_email']);
+}
+if (isset($_SESSION['errors']['error_password']) && $_SESSION['errors']['error_password'] != "") {
+    echo "<p>" . $_SESSION['errors']['error_password'] . "</p>";
+    unset($_SESSION['errors']['error_password']);
+}
+?>
 
 
 

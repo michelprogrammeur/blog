@@ -41,6 +41,7 @@ class Register {
 
             return true;
         }else {
+
             return self::$errors;
         }
     }

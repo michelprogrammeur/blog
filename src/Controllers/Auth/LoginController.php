@@ -30,14 +30,14 @@ class LoginController
 
             if($result_login === true) {
                 if ($_SESSION['user']['role'] === 'visiteur') {
-                    $this->redirect('/');
+                    $this->redirect('/')->with("login_success", "Vous êtes bien connecté !");;
                 }
                 elseif ($_SESSION['user']['role'] === 'admin') {
-                    $this->redirect('/admin/dashboard');
+                    $this->redirect('/admin/dashboard')->with("login_success", "Vous êtes bien connecté !");
                 }
             }
             else {
-                $this->redirect('/login');
+                $this->redirect('/login')->with("error_login", "Un des champs renseigné est invalide.");;
             }
         }
     }

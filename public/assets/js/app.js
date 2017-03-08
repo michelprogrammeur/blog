@@ -1,10 +1,19 @@
 let btnResponse = document.getElementsByClassName('reply');
+let form = document.getElementById('form_reply');
+
+function insertAfter(el, referenceNode) {
+    referenceNode.parentNode.insertBefore(el, referenceNode.nextSibling);
+}
 
 Array.from(btnResponse).forEach(function(element) {
     element.addEventListener("click", function (e) {
         e.preventDefault();
-        console.log('coucou');
+
+        document.getElementById("reply_id").value = element.dataset.id;
+
+        insertAfter(form, element);
+
+        form.style.display = "block";
+
     });
 });
-
-

@@ -1,4 +1,18 @@
-<?php include __DIR__ .'/../../resources/Views/partials/header.php'; ?>
+<?php include __DIR__ .'/../../resources/Views/partials/header.php';
+
+if (isset($_SESSION['errors']['comment_report']) && $_SESSION['errors']['comment_report'] != "") {
+    echo "<p>" . $_SESSION['errors']['comment_report'] . "</p>";
+    unset($_SESSION['errors']['comment_report']);
+}
+if (isset($_SESSION['errors']['comment_add']) && $_SESSION['errors']['comment_add'] != "") {
+    echo "<p>" . $_SESSION['errors']['comment_add'] . "</p>";
+    unset($_SESSION['errors']['comment_add']);
+}
+if (isset($_SESSION['errors']['comment_add_reply']) && $_SESSION['errors']['comment_add_reply'] != "") {
+    echo "<p>" . $_SESSION['errors']['comment_add_reply'] . "</p>";
+    unset($_SESSION['errors']['comment_add_reply']);
+}
+?>
 
 <div id="billet">
     <p><?php echo $post->title; ?></p>
@@ -9,32 +23,29 @@
     <form id="comment" method="post" action=<?php echo "/blog/post/" . $post->id . "/add"; ?>>
         <div id="comment-field">
             <label>Votre commentaire</label>
-            <textarea name="message" ></textarea>
+            <textarea name="message"></textarea>
         </div>
         <button type="submit">Commenter</button>
     </form>
 <?php endif; ?>
 
+<?php
+if(isset($comments) && !empty($comments)) {
+    foreach ($comments as $comment) {
+        require "comments/comments.php";
+    }
+}
+?>
 
+<?php if(isset($_SESSION['user'])) : ?>
+    <form style="display: none" id="form_reply" method="post" action=<?=  URL . '/comments/add/reply/' . $post->id ?>>
+        <label>Votre réponse</label>
+        <textarea name="message" placeholder="Votre commentaire..."></textarea>
+        <input id="reply_id" name="reply_id" type="hidden" value="0">
 
-
-<?php if(isset($comments) && !empty($comments)) : ?>
-    <?php foreach ($comments as $comment) : ?>
-        <div id="comments">
-            <p><?php echo $comment->author; ?></p>
-            <p><?php echo $comment->published_at; ?></p>
-            <p><?php echo $comment->content; ?></p>
-            <?php if (isset($_SESSION['user'])) : ?>
-                <?php if ($comment->warning !== '1') : ?>
-                    <form action="<?= URL . '/comments/report/post/' . $post->id . '/comment/' . $comment->id ?>" method="post">
-                        <button type="submit">Signaler</button>
-                    </form>
-                    <button type="submit" class="reply" data-id="<?php echo $comment->id; ?>">Répondre</button>
-                <?php endif; ?>
-            <?php endif; ?>
-        </div>
-        </br>
-    <?php endforeach; ?>
- <?php else: ?>
-    <p><span>Cet épisode ne possède pas de commentaires</span></p>
+        <button  type="submit">Envoyer</button>
+    </form>
 <?php endif; ?>
+
+
+<script src="<?= URL . '/public/assets/js/app.js' ?>"></script>

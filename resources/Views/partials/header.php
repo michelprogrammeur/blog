@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
+    
+
     <style>
         html { padding: 0; }
         body { padding: 0; margin: 0; }
@@ -21,6 +23,5 @@
 <body>
 
     <?php include __DIR__ .'/../partials/navbar.php'; ?>
-
 </body>
 </html>

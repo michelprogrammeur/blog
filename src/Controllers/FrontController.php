@@ -18,7 +18,7 @@ class FrontController
 
     public function showSinglePost($id) {
         $post = Post::getSinglePost($id);
-        $comments = Comment::getAllCommentsByPost($id);
+        $comments = Comment::getAllWithReply($id);
 
         $this->renderView('singlePost', compact('post', 'comments'));
     }

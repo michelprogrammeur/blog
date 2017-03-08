@@ -10,14 +10,26 @@ class CommentController
 {
     use Helpers;
 
-    public function add($post_id) {
+    public function add($post_id, $data) {
         if (!empty($_POST)) {
-            $content = htmlspecialchars($_POST['message']);
+
+            $content = htmlspecialchars($data['message']);
             $author = $_SESSION['user']['pseudo'];
             $user_id = $_SESSION['user']['id'];
-            Comment::addComment($user_id, $post_id, $author, $content);
 
-            $this->redirect('/post/' . $post_id);
+            if (!isset($data['reply_id'])) {
+                Comment::addComment($user_id, $post_id, $author, $content);
+                $this->redirect('/post/' . $post_id)->with("comment_add", "Le commentaire à bien été ajouté");
+
+                return;
+            }
+            else {
+                $reply_id = $data['reply_id'];
+                Comment::addReply($user_id, $post_id, $reply_id, $author, $content);
+                $this->redirect("/post/" . $post_id)->with("comment_add_reply", "La réponse au commentaire a été ajoutée");
+
+                return;
+            }
         }
     }
 
@@ -25,7 +37,7 @@ class CommentController
         if (isset($_SESSION['user'])) {
             Comment::reportComment($id);
 
-            $this->redirect("/post/" . $post_id);
+            $this->redirect("/post/" . $post_id)->with("comment_report", "Le commentaire a bien été signalé");
         }
         else {
             $this->redirect("/");
@@ -35,7 +47,7 @@ class CommentController
     public function restore($id) {
         Comment::restoreComment($id);
 
-        $this->redirect("/admin/comments");
+        $this->redirect("/admin/comments")->with("comment_restore", "Le commentaire a été restauré");
     }
     
     public function CommentsReported() {
@@ -46,6 +58,6 @@ class CommentController
     public function delete($id) {
         Comment::deleteComment($id);
 
-        $this->redirect("/admin/comments");
+        $this->redirect("/admin/comments")->with("comment_delete", "Le commentaire a bien été supprimé");
     }
 }

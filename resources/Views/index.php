@@ -1,16 +1,18 @@
-<?php include __DIR__ .'/../../resources/Views/partials/header.php'; ?>
+<?php include __DIR__ .'/../../resources/Views/partials/header.php';
+
+if (isset($_SESSION['errors']['login_success']) && $_SESSION['errors']['login_success'] != "") {
+    echo "<p>" . $_SESSION['errors']['login_success'] . "</p>";
+    unset($_SESSION['errors']['login_success']);
+}
+
+?>
+
 
 <h1>Page d'accueil</h1>
 
-<!-- if(isset($_SESSION['user']) && !empty($_SESSION['user'])) {
-    if ($_SESSION['user']->role === 'visiteur') {
-        echo "Bienvenu " . $_SESSION['user']->pseudo . " vous êtes connecté en temps que " . $_SESSION['user']->role;
-    }
-} -->
-
 <?php foreach ($posts as $post) : ?>
     <div id="billet">
-        <p><a href=<?php echo URL . '/post/' . $post->id; ?>><?php echo $post->title; ?></a></p>
+        <h3><a href=<?php echo URL . '/post/' . $post->id; ?>><?php echo $post->title; ?></a></h3>
         <p><?php echo $post->content; ?></p>
     </div>
     </br>

@@ -1,12 +1,13 @@
 <?php
 
+use App\Middleware\AdminMiddleware;
+use App\Controllers\UserController;
 use App\Controllers\FrontController;
 use App\Controllers\Auth\RegisterController;
 use App\Controllers\Auth\LoginController;
 use App\Controllers\Admin\AdminController;
 use App\Controllers\Admin\PostController;
 use App\Controllers\CommentController;
-use App\Middleware\AdminMiddleware;
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $method = $_SERVER['REQUEST_METHOD'];
@@ -43,6 +44,11 @@ if($method == 'GET') {
         case preg_match('#\/blog\/post\/([0-9]+)(\/?)$#', $uri, $matches) == 1:
             $logout = new FrontController();
             $logout->showSinglePost($matches[1]);
+            break;
+
+        case preg_match('#\/blog\/account$#', $uri) == 1:
+            $user = new UserController();
+            $user->show();
             break;
 
         // ADMIN GET ROOTS ------------------
@@ -114,6 +120,16 @@ if($method == 'POST') {
             $login->login();
             break;
 
+        // ----------- USER POST ROOTS ------------ //
+        case preg_match('#\/blog\/account\/email-update$#', $uri) == 1:
+            $user = new UserController();
+            $user->modificationEmail();
+            break;
+
+        case preg_match('#\/blog\/account\/password-update$#', $uri) == 1:
+            $user = new UserController();
+            $user->modificationPassword();
+            break;
 
         // ----------- ADMIN POST ROOTS ------------ //
 
@@ -148,12 +164,17 @@ if($method == 'POST') {
 
         case preg_match('#\/blog\/post\/([0-9]+)\/add$#', $uri, $matches) == 1:
             $comment = new CommentController();
-            $comment->add($matches[1]);
+            $comment->add($matches[1], $_POST);
+            break;
+
+        case preg_match('#\/blog\/comments\/add\/reply\/([0-9]+)$#', $uri, $matched) == 1 :
+            $comments = new CommentController();
+            $comments->add($matched[1], $_POST);
             break;
 
         case preg_match('#\/blog\/comments\/report\/post\/([0-9]+)\/comment\/([0-9]+)$#', $uri, $matches) == 1 :
-            $ctrl = new CommentController();
-            $ctrl->report($matches[1], $matches[2]);
+            $comments = new CommentController();
+            $comments->report($matches[1], $matches[2]);
             break;
 
         case preg_match('#\/blog\/'. $admin .'\/comment\/([0-9]+)\/delete$#', $uri, $matches) == 1:

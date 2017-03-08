@@ -1,12 +1,9 @@
-<?php if(!empty($_SESSION['errors'])): ?>
-    <div>
-        <?php foreach ($_SESSION['errors'] as $error) : ?>
-            <ul>
-                <li><?php echo $error; ?></li>
-            </ul>
-        <?php endforeach; ?>
-    </div>
-<?php endif; ?>
+<?php
+if (isset($_SESSION['errors']['error_login']) && $_SESSION['errors']['error_login'] != "") {
+    echo "<p>" . $_SESSION['errors']['error_login'] . "</p>";
+    unset($_SESSION['errors']['error_login']);
+}
+?>
 
 <h1>Page de connexion</h1>
 

@@ -1,7 +1,7 @@
 <?php include __DIR__ .'/../../resources/Views/partials/header.php';
 
 if (isset($_SESSION['errors']['login_success']) && $_SESSION['errors']['login_success'] != "") {
-    echo "<p>" . $_SESSION['errors']['login_success'] . "</p>";
+    echo "<p class='success'>" . $_SESSION['errors']['login_success'] . "</p>";
     unset($_SESSION['errors']['login_success']);
 }
 

@@ -1,15 +1,15 @@
 <?php include __DIR__ .'/../../resources/Views/partials/header.php';
 
 if (isset($_SESSION['errors']['comment_report']) && $_SESSION['errors']['comment_report'] != "") {
-    echo "<p>" . $_SESSION['errors']['comment_report'] . "</p>";
+    echo "<p class='success'>" . $_SESSION['errors']['comment_report'] . "</p>";
     unset($_SESSION['errors']['comment_report']);
 }
 if (isset($_SESSION['errors']['comment_add']) && $_SESSION['errors']['comment_add'] != "") {
-    echo "<p>" . $_SESSION['errors']['comment_add'] . "</p>";
+    echo "<p class='success'>" . $_SESSION['errors']['comment_add'] . "</p>";
     unset($_SESSION['errors']['comment_add']);
 }
 if (isset($_SESSION['errors']['comment_add_reply']) && $_SESSION['errors']['comment_add_reply'] != "") {
-    echo "<p>" . $_SESSION['errors']['comment_add_reply'] . "</p>";
+    echo "<p class='success'>" . $_SESSION['errors']['comment_add_reply'] . "</p>";
     unset($_SESSION['errors']['comment_add_reply']);
 }
 ?>

@@ -87,8 +87,7 @@ class User
         }
     }
 
-
-    // Verifi si l'email existe dans la base de données.
+    // Verifie si l'email existe dans la base de données.
     private static function verifyEmailExist($field) {
         global $connect;
 
@@ -107,7 +106,7 @@ class User
         }
     }
 
-    // Verifi si l'email est conforme
+    // Verifie si l'email est conforme
     private static function verifyIsEmail($field) {
         $regex = '#(?:[A-Z{1}a-z\d]*\@{1}[A-Za-z\d]*\.{1}[A-Za-z\d]+)#i';
 
@@ -120,10 +119,7 @@ class User
         }
     }
 
-
-
-
-    // vérifie la validité du nouveau password et de sa confirmation
+    // Vérifie la validité du nouveau password et de sa confirmation
     private static function verifyIsPassword($field, $confirmPassword) {
         $regex = '#^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{7,})\S$#';
 

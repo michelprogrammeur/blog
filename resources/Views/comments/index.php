@@ -3,6 +3,10 @@ if (isset($_SESSION['errors']['comment_restore']) && $_SESSION['errors']['commen
     echo "<p class='success'>" . $_SESSION['errors']['comment_restore'] . "</p>";
     unset($_SESSION['errors']['comment_restore']);
 }
+if (isset($_SESSION['errors']['comment_delete']) && $_SESSION['errors']['comment_delete'] != "") {
+    echo "<p class='success'>" . $_SESSION['errors']['comment_delete'] . "</p>";
+    unset($_SESSION['errors']['comment_delete']);
+}
 ?>
 
 <h1>Liste des Commentaires signalés</h1>

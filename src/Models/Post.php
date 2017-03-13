@@ -30,11 +30,11 @@ class Post {
     }
 
     // ajouter un nouveau post
-    public static function AddNewPost() {
+    public static function AddNewPost(array $data) {
         global $connect;
 
-        $title = htmlspecialchars($_POST['title']);
-        $content = htmlspecialchars($_POST['content']);
+        $title = $data['title'];
+        $content = $data['content'];
 
         $response = $connect->getPdo()->prepare('
             INSERT INTO billets(title, content, published_at) 
@@ -62,11 +62,11 @@ class Post {
         return $data;
     }
 
-    public static function updatePost($id) {
+    public static function updatePost($id, array $data) {
         global $connect;
 
-        $title = htmlspecialchars($_POST['title']);
-        $content = htmlspecialchars($_POST['content']);
+        $title = $data['title'];
+        $content = $data['content'];
 
         $response = $connect->getPdo()->prepare('
             UPDATE billets 

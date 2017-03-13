@@ -32,7 +32,7 @@ trait Helpers
 
     public function debug($value) {
         echo '<pre>';
-        var_dump($value);
+        print_r($value);
         echo '</pre>';
         die;
     }

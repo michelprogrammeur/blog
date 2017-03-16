@@ -13,7 +13,8 @@ $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $method = $_SERVER['REQUEST_METHOD'];
 $admin = 'admin';
 
-$admin_middleware = new AdminMiddleware();
+$middleware = new AdminMiddleware();
+
 
 if($method == 'GET') {
     switch ($uri) {
@@ -27,6 +28,12 @@ if($method == 'GET') {
         case preg_match('#\/blog\/register(\/?)$#', $uri) == 1:
             $register = new RegisterController();
             $register->registerIndex();
+            break;
+
+        // ttttt
+        case preg_match('#\/blog\/forgot(\/?)$#', $uri) == 1:
+            $forgot = new LoginController();
+            $forgot->forgot();
             break;
 
         // CONNECTION-----
@@ -53,12 +60,14 @@ if($method == 'GET') {
 
         // ADMIN GET ROOTS ------------------
         case preg_match('#\/blog\/' . $admin . '(\/?)$#', $uri) == 1:
+            $admin_middleware = $middleware->middleware();
             if($admin_middleware) {
                 header('Location:' . URL . '/admin/dashboard');
             }
             break;
 
         case preg_match('#\/blog\/' . $admin . '\/dashboard(\/?)$#', $uri) == 1:
+            $admin_middleware = $middleware->middleware();
             if($admin_middleware) {
                 $login = new AdminController();
                 $login->index();
@@ -66,6 +75,7 @@ if($method == 'GET') {
             break;
 
         case preg_match('#\/blog\/' . $admin . '\/comments$#', $uri) == 1:
+            $admin_middleware = $middleware->middleware();
             if($admin_middleware) {
                 $comments = new CommentController();
                 $comments->CommentsReported();
@@ -74,6 +84,7 @@ if($method == 'GET') {
 
         // CRUD POSTS
         case preg_match('#\/blog\/' . $admin . '\/posts(\/?)$#', $uri) == 1:
+            $admin_middleware = $middleware->middleware();
             if($admin_middleware) {
                 $posts = new PostController();
                 $posts->index();
@@ -81,6 +92,7 @@ if($method == 'GET') {
             break;
 
         case preg_match('#\/blog\/' . $admin . '\/post\/([0-9]+)(\/?)$#', $uri, $matches) == 1:
+            $admin_middleware = $middleware->middleware();
             if($admin_middleware) {
                 $posts = new PostController();
                 $posts->show($matches[1]);
@@ -88,6 +100,7 @@ if($method == 'GET') {
             break;
 
         case preg_match('#\/blog\/' . $admin . '\/post\/create(\/?)$#', $uri) == 1:
+            $admin_middleware = $middleware->middleware();
             if($admin_middleware) {
                 $posts = new PostController();
                 $posts->create();
@@ -95,6 +108,7 @@ if($method == 'GET') {
             break;
 
         case preg_match('#\/blog\/' . $admin . '\/post\/([0-9]+)\/edit$#', $uri, $matches) == 1:
+            $admin_middleware = $middleware->middleware();
             if($admin_middleware) {
                 $posts = new PostController();
                 $posts->edit($matches[1]);
@@ -120,6 +134,11 @@ if($method == 'POST') {
             $login->login();
             break;
 
+        case preg_match('#\/blog\/send-password(\/?)$#', $uri) == 1:
+            $forgot = new LoginController();
+            $forgot->sendPassword();
+            break;
+
         // ----------- USER POST ROOTS ------------ //
         case preg_match('#\/blog\/account\/email-update$#', $uri) == 1:
             $user = new UserController();
@@ -135,6 +154,7 @@ if($method == 'POST') {
 
         // POSTS
         case preg_match('#\/blog\/'. $admin .'\/post\/store#', $uri) == 1:
+            $admin_middleware = $middleware->middleware();
             if($admin_middleware) {
                 $posts = new PostController();
                 $posts->store();
@@ -142,6 +162,7 @@ if($method == 'POST') {
             break;
 
         case preg_match('#\/blog\/'. $admin .'\/post\/([0-9]+)\/update$#', $uri, $matches) == 1:
+            $admin_middleware = $middleware->middleware();
             if($admin_middleware) {
                 $posts = new PostController();
                 $posts->update($matches[1]);
@@ -149,6 +170,7 @@ if($method == 'POST') {
             break;
 
         case preg_match('#\/blog\/'. $admin .'\/post\/([0-9]+)\/delete$#', $uri, $matches) == 1:
+            $admin_middleware = $middleware->middleware();
             if($admin_middleware) {
                 $posts = new PostController();
                 $posts->destroy($matches[1]);
@@ -157,6 +179,7 @@ if($method == 'POST') {
 
         // COMMENTS
         case preg_match('#\/blog\/'. $admin .'\/comments#', $uri) == 1:
+            $admin_middleware = $middleware->middleware();
             if($admin_middleware) {
                 $comments = new CommentController();
             }
@@ -178,6 +201,7 @@ if($method == 'POST') {
             break;
 
         case preg_match('#\/blog\/'. $admin .'\/comment\/([0-9]+)\/delete$#', $uri, $matches) == 1:
+            $admin_middleware = $middleware->middleware();
             if($admin_middleware) {
                 $comments = new CommentController();
                 $comments->delete($matches[1]);
@@ -185,6 +209,7 @@ if($method == 'POST') {
             break;
 
         case preg_match('#\/blog\/'. $admin .'\/comment\/([0-9]+)\/restore$#', $uri, $matches) == 1:
+            $admin_middleware = $middleware->middleware();
             if($admin_middleware) {
                 $comments = new CommentController();
                 $comments->restore($matches[1]);

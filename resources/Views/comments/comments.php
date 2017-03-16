@@ -1,21 +1,28 @@
 <div>
-    <p><?php echo $comment->author; ?></p>
-    <p><?php echo $comment->published_at; ?></p>
-    <p><?php echo $comment->content; ?></p>
-
-    <?php if(isset($_SESSION['user'])) : ?>
-        <form id="form_comment" action="<?= URL . '/comments/report/post/' . $post->id . '/comment/' . $comment->id ?>" method="post">
-            <button type="submit">Signaler</button>
-        </form>
-        <button class="btn btn-default reply" data-id="<?= $comment->id; ?>">Répondre</button>
-    <?php endif; ?>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 style="display: inline-block; padding: 0 20px 0 0"><?= $comment->author; ?></h4>
+            <span style="font-size: 14px" class="label label-info"><?= $comment->published_at; ?></span>
+        </div>
+        <div class="panel-body">
+            <p><?= $comment->content; ?></p>
+            <?php if(isset($_SESSION['user'])) : ?>
+                <form class="text-right" id="form_comment" action="<?= URL . '/comments/report/post/' . $post->id . '/comment/' . $comment->id ?>" method="post">
+                    <button class="btn btn-info reply" data-id="<?= $comment->id; ?>">Répondre</button>
+                    <button class="btn btn-danger type="submit">Signaler</button>
+                </form>
+            <?php endif; ?>
+        </div>
+    </div>
 </div>
 
 <div style="margin-left: 65px;">
-    <?php if(isset($comment->children)): ?>
-        <?php foreach($comment->children as $comment): ?>
-            <?php require('comments.php'); ?>
-        <?php endforeach; ?>
-    <?php endif; ?>
+    <?php
+    if(isset($comment->children)) {
+        foreach($comment->children as $comment) {
+            require('comments.php');
+        }
+    }
+    ?>
 </div>
 

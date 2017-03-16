@@ -2,7 +2,6 @@
 
 namespace App\Middleware;
 
-
 use App\Helpers\Helpers;
 
 class AdminMiddleware

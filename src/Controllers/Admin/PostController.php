@@ -15,7 +15,6 @@ use GUMP;
 class PostController
 {
     use Helpers;
-    private $valid_errors;
 
     public function index() {
         $posts = Post::getAllPosts();
@@ -27,15 +26,17 @@ class PostController
     }
 
     public function store() {
-
+        // Validation des champs avec GUMP
         $is_validate = GUMP::is_valid($_POST, array(
             "title" => "required|min_len,2|max_len,100",
+            "abstract" => "required|min_len,2",
             "content" => "required|min_len,2"
         ));
 
         if($is_validate === true) {
             $data_post = array(
                 "title" => htmlentities($_POST['title']),
+                "abstract" => htmlentities($_POST['abstract']),
                 "content" => htmlentities($_POST['content'])
             );
 
@@ -46,8 +47,6 @@ class PostController
 
             $this->redirect("/admin/post/create")->with("post_add_error", "Les données ne correspondent pas aux contraintes demandées");
         }
-
-
     }
 
     public function show($id) {
@@ -61,17 +60,16 @@ class PostController
     }
 
     public function update($id) {
-
-        // TODO afficher les erreurs des validation GUMP
-
         $is_validate = GUMP::is_valid($_POST, array(
             "title" => "required|min_len,2|max_len,100",
+            "abstract" => "required|min_len,2",
             "content" => "required|min_len,2"
         ));
 
         if ($is_validate === true) {
             $data_post = [
                 "title" => htmlspecialchars($_POST['title']),
+                "abstract" => htmlentities($_POST['abstract']),
                 "content" => htmlspecialchars($_POST['content']),
             ];
 
@@ -82,7 +80,6 @@ class PostController
 
             $this->redirect("/admin/post/" . $id . "/edit")->with("post_update_error", "Les données ne correspondent pas aux contraintes demandées");
         }
-
     }
 
     public function destroy($id) {

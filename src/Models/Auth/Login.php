@@ -27,7 +27,6 @@ class Login
         }
     }
 
-
     private static function verifyPassword($password, $password_hash) {
         $password_check = password_verify($password, $password_hash);
 

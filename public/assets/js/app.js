@@ -11,7 +11,7 @@ Array.from(btnResponse).forEach(function(element) {
 
         document.getElementById("reply_id").value = element.dataset.id;
 
-        insertAfter(form, element);
+        insertAfter(form, element.parentNode);
 
         form.style.display = "block";
 

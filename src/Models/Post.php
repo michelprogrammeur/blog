@@ -34,14 +34,16 @@ class Post {
         global $connect;
 
         $title = $data['title'];
+        $abstract = $data['abstract'];
         $content = $data['content'];
 
         $response = $connect->getPdo()->prepare('
-            INSERT INTO billets(title, content, published_at) 
-            VALUES(:title, :content, now())
+            INSERT INTO billets(title, abstract, content, published_at) 
+            VALUES(:title, :abstract, :content, now())
         ');
         $response->execute([
             "title" => $title,
+            "abstract" => $abstract,
             "content" => $content
         ]);
         $data = $response->fetch(\PDO::FETCH_OBJ);
@@ -66,15 +68,17 @@ class Post {
         global $connect;
 
         $title = $data['title'];
+        $abstract = $data['abstract'];
         $content = $data['content'];
 
         $response = $connect->getPdo()->prepare('
             UPDATE billets 
-            SET title = :title, content = :content, published_at = current_timestamp 
+            SET title = :title, abstract = :abstract, content = :content, published_at = current_timestamp 
             WHERE id = :id
         ');
         $response->execute([
             "title" => $title,
+            "abstract" => $abstract,
             "content" => $content,
             "id" => $id
         ]);

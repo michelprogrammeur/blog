@@ -57,7 +57,6 @@ class Comment
         return $data;
     }
 
-
     // Ajouter un nouveau commentaire
     public static function addComment($userId, $postId, $author, $content) {
         global $connect;

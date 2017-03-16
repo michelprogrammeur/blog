@@ -17,19 +17,15 @@ class RegisterController
     }
 
     public function register() {
-
         if (!empty($_POST)) {
-            $pseudo = htmlspecialchars($_POST['pseudo']);
-            $email = htmlspecialchars($_POST['email']);
-            $password = htmlspecialchars($_POST['password']);
-            $password_confirm = htmlspecialchars($_POST['password_confirm']);
+            $data_post = [
+                "pseudo" => htmlspecialchars($_POST['pseudo']),
+                "email" => htmlspecialchars($_POST['email']),
+                "password" => htmlspecialchars($_POST['password']),
+                "password_confirm" => htmlspecialchars($_POST['password_confirm'])
+            ];
 
-            $register = Register::registerUser([
-                "pseudo" => $pseudo,
-                "email" => $email,
-                "password" => $password,
-                "password_confirm" => $password_confirm
-            ]);
+            $register = Register::registerUser($data_post);
 
             if (isset($register["error_pseudo"]) && $register['error_pseudo'] === true) {
                 $this->redirect('/register')->with('error_pseudo', 'Le pseudo ne peut être vide ou il existe déjà, veuillez en choisir un autre');
@@ -41,7 +37,7 @@ class RegisterController
                 $this->redirect('/register')->with('error_password', 'Votre mot de passe doit contenir au minimun 8 caractères dont 1 majuscule, 1 minuscule, 1 chiffre et ëtre confirmé.');
             }
             if ($register === true) {
-                $this->redirect('/login');
+                $this->redirect('/login')->with('register_success', 'Votre inscription a bien été effectuée.');
             }
         }
     }

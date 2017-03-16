@@ -17,16 +17,14 @@ class LoginController
         $this->renderView('auth.login');
     }
 
-
     public function login() {
         if (!empty($_POST)) {
-            $email = htmlspecialchars($_POST['email']);
-            $password = htmlspecialchars($_POST['password']);
+            $array_post = [
+                "email" => htmlspecialchars($_POST['email']),
+                "password" => htmlspecialchars($_POST['password']),
+            ];
 
-            $result_login = Login::loginUser([
-                "email" => $email,
-                "password" => $password,
-            ]);
+            $result_login = Login::loginUser($array_post);
 
             if($result_login === true) {
                 if ($_SESSION['user']['role'] === 'visiteur') {
@@ -42,6 +40,14 @@ class LoginController
         }
     }
 
+    // Todo voir si on supprime ou pas l'oubli de mot de passe
+    public function forgot() {
+        $this->renderView('auth.forgot');
+    }
+
+    public function sendPassword($email) {
+
+    }
 
     public function logout() {
         session_destroy();

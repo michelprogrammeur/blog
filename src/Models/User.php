@@ -87,7 +87,8 @@ class User
         }
     }
 
-    // Verifie si l'email existe dans la base de données.
+
+// Verifie si l'email existe dans la base de données.
     private static function verifyEmailExist($field) {
         global $connect;
 
@@ -151,5 +152,4 @@ class User
 
         return $hash_password;
     }
-
 }

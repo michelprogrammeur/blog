@@ -1,4 +1,5 @@
-<?php
+<?php include __DIR__ .'/../../partials/header.php';
+
 if (isset($_SESSION['errors']['post_update_error']) && $_SESSION['errors']['post_update_error'] != "") {
     echo "<p>" . $_SESSION['errors']['post_update_error'] . "</p>";
     unset($_SESSION['errors']['post_update_error']);
@@ -12,9 +13,13 @@ if (isset($_SESSION['errors']['post_update_error']) && $_SESSION['errors']['post
         <label>Title</label>
         <input type="text" name="title" value="<?= $post->title ?>">
     </div>
+    <div id="post-abstract">
+        <label>Extrait de l'épisode</label>
+        <textarea name="abstract" placeholder="Extrait ..."><?= $post->abstract ?></textarea>
+    </div>
     <div id="post-content">
         <label>Contenu</label>
-        <textarea name="content" placeholder="Votre texte ..."><?= $post->content ?></textarea>
+        <textarea id="content" name="content" placeholder="Votre texte ..."><?= $post->content ?></textarea>
     </div>
     <button type="submit">Modifier</button>
 </form>
